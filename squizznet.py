@@ -9,9 +9,11 @@ from transformers import GPT2Tokenizer, GPT2Model
 from pygame import mixer
 import os
 import openai
-import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 openai.organization = "org-F5uP5RO6y4zEyQmPuQLmfyzf"
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.Model.list();
 
 page = ft.Page
