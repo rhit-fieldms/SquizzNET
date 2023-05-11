@@ -5,7 +5,6 @@ import flet as ft
 from flet import *
 from transformers import pipeline, set_seed
 from urllib.parse import urlparse
-from transformers import GPT2Tokenizer, GPT2Model
 from pygame import mixer
 import os
 import openai
@@ -18,7 +17,7 @@ openai.Model.list();
 
 page = ft.Page
 qTopic = ft.TextField(autofocus=True, border_color="white")
-generator = pipeline('text-generation', model='gpt2')
+contextField = ft.TextField(autofocus=True, border_color="white")
 question = ''
 ans = ''
 correctAns = ''
@@ -46,11 +45,12 @@ def main(page: Page):
 				)
 		if page.route == f"/generate":
 			qTopic = ft.TextField(autofocus=True, border_color="white")
-			
+			contextField = ft.TextField(autofocus=True, border_color="white")
 			def makeSquizz(e):
 				global question
 				question = "Make a multiple choice question about " + qTopic.value
-				question = question + " and provide the answer. Please provide 4 answer choices labeled with letters and format the answers with a )"
+				context = contextField.value
+				question = question + " and provide the answer. Please provide 4 answer choices labeled with letters and format the answers with a ) and list the answer after 'Answer: '." + context
 				page.go(f"/squizz")
 			
 			page.views.append(
@@ -59,7 +59,10 @@ def main(page: Page):
 				    	ft.Row([ft.Text(value="Provide a specific topic for your Squizz", text_align=ft.TextAlign.RIGHT)],
             			alignment=ft.MainAxisAlignment.CENTER), 
         				ft.Row([qTopic], alignment=ft.MainAxisAlignment.CENTER),
-        				ft.Row([ft.ElevatedButton("Generate Squizz", on_click=makeSquizz)], alignment=ft.MainAxisAlignment.CENTER)]
+			            ft.Row([ft.Text(value="Provide additional context for your Squizz", text_align=ft.TextAlign.RIGHT)],
+		                alignment=ft.MainAxisAlignment.CENTER),
+			            ft.Row([contextField], alignment=ft.MainAxisAlignment.CENTER),
+			            ft.Row([ft.ElevatedButton("Generate Squizz", on_click=makeSquizz)], alignment=ft.MainAxisAlignment.CENTER),]
 					)
 			)
                         
