@@ -1,10 +1,7 @@
 #from squizz import squizznet
 #import markiplier
-import transformers
 import flet as ft
 from flet import *
-from transformers import pipeline, set_seed
-from urllib.parse import urlparse
 from pygame import mixer
 import os
 import openai
@@ -44,13 +41,16 @@ def main(page: Page):
 					)
 				)
 		if page.route == f"/generate":
+			
 			qTopic = ft.TextField(autofocus=True, border_color="white")
 			contextField = ft.TextField(autofocus=True, border_color="white")
 			def makeSquizz(e):
 				global question
 				question = "Make a multiple choice question about " + qTopic.value
 				context = contextField.value
-				question = question + " and provide the answer. Please provide 4 answer choices labeled with letters and format the answers with a ) and list the answer after 'Answer: '." + context
+				question = question + " and provide the answer. Please provide 4 answer choices labeled with letters and format the answers with a ) and list the answer after 'Answer: '. Do not preface the questions with a number"
+				if context != '':
+					question = question + "For context: " + context
 				page.go(f"/squizz")
 			
 			page.views.append(
@@ -67,6 +67,9 @@ def main(page: Page):
 			)
                         
 		if page.route == f"/squizz":
+			if 'Paralyzer' in question:
+				mixer.music.load("soundtrack.mp3")
+				mixer.music.play()
 			userQst = ''
 			answerA = ft.OutlinedButton()
 			answerB = ft.OutlinedButton()
@@ -128,7 +131,9 @@ def main(page: Page):
 				while initText[i] != '\n':
 					ansDText = ansDText + initText[i]
 					i += 1
-				i += 10
+				while initText[i] != ':':
+					i += 1
+				i += 2
 				global ans
 				ans = initText[i]
 				print(ans)
