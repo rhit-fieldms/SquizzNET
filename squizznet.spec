@@ -41,6 +41,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    version='C:\\Users\\bostiadm\\AppData\\Local\\Temp\\8802d00d-536d-425c-ae93-db97a35b052b',
+    version='C:\\Users\\bostiadm\\AppData\\Local\\Temp\\74174f94-aae8-41a7-97fb-0b550b66f024',
     icon=['favicon.png'],
 )
